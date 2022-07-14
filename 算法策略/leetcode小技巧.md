@@ -1,6 +1,6 @@
 leetcode给的模板函数不太好处理，于是在这个模板函数里调用另外一个我们自己写的函数
 
-   leetcode94. 二叉树的中序遍历：
+leetcode94. 二叉树的中序遍历：
    class Solution {
       public List<Integer> inorderTraversal(TreeNode root) {
         List<Integer> list= new ArrayList<Integer>();
@@ -15,7 +15,7 @@ leetcode给的模板函数不太好处理，于是在这个模板函数里调用
       }
    }
 
-   leetcode101. 对称二叉树：
+leetcode101. 对称二叉树：
 //递归写着写着就出来了
 //  递归的难点在于：找到可以递归的点 为什么很多人觉得递归一看就会，一写就废。 或者说是自己写无法写出来，关键就是你对递归理解的深不深。
 
@@ -49,5 +49,38 @@ leetcode给的模板函数不太好处理，于是在这个模板函数里调用
         if((left == null && right != null) || (left != null && right == null)) return false;
         if(left.val != right.val) return false;
         return isSymmetricFunc(left.right , right.left) && isSymmetricFunc(left.left , right.right);
+    }
+}
+
+leetcode108. 将有序数组转换为二叉搜索树
+
+class Solution {
+    //递归只管先动手写
+    public TreeNode sortedArrayToBST(int[] nums) {
+    if(nums == null) return null;
+    int left = 0;
+    int right = nums.length - 1;
+    int mid = nums.length/2;//此举保证平衡性！！！
+    //先建立根节点
+    TreeNode root = new TreeNode(nums[mid]);
+    //左右子树连上，发现需要用到更多的下标参数，现有的只有一个参数做不到，那么新写一个函数去构建，返回左右子树的根
+    root.left = buildTree(nums , left , mid - 1);
+    root.right = buildTree(nums, mid +1 , right);
+    //返回根节点
+    return root;
+    }
+
+    public TreeNode buildTree(int[] nums , int left , int right){
+    if(nums == null) return null;
+    //left和right最后会相等然后结束，若这里不加以控制，就会出现left比right大的情况下继续进行
+    if (left > right) {
+            return null;
+        }
+    int mid = (left + right) / 2; //此举保证平衡性！！！
+    
+    TreeNode root = new TreeNode(nums[mid]);
+    root.left = buildTree(nums , left , mid - 1);
+    root.right = buildTree(nums, mid +1 , right);
+    return root;
     }
 }
